@@ -17,153 +17,14 @@
 #define LED_8 GPIO_NUM_33
 #define LED_9 GPIO_NUM_32
 
+#define HALL_SENSOR_UNIT ADC_UNIT_2
+#define HALL_SENSOR_CHANNEL ADC_CHANNEL_0
+
 constexpr gpio_num_t leds[] = {LED_1, LED_2, LED_3, LED_4, LED_5, LED_6, LED_7, LED_8, LED_9};
 constexpr uint8_t ledsCount = std::size(leds);
 constexpr uint16_t steps = 110;
-constexpr uint16_t charSteps = 10;
 
-constexpr uint8_t char_0[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_1[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 1, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_2[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 0, 0, 0, 1, 0, 0},
-    {0, 1, 0, 1, 0, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 0, 1, 1, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_3[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 1, 1, 1, 1, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_4[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 1, 0, 0, 0, 0, 0},
-    {0, 0, 1, 0, 1, 0, 0, 0, 0},
-    {0, 0, 1, 0, 0, 1, 0, 0, 0},
-    {0, 0, 1, 0, 0, 0, 1, 0, 0},
-    {0, 1, 1, 1, 1, 0, 0, 1, 0},
-    {0, 0, 1, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_5[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 1, 0, 0, 1, 1, 1, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 0, 1, 1, 0, 0, 0, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_6[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 1, 1, 1, 1, 0, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 0, 1, 1, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_7[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 1, 0},
-    {0, 1, 0, 0, 0, 0, 0, 1, 0},
-    {0, 0, 1, 0, 0, 0, 0, 1, 0},
-    {0, 0, 0, 1, 0, 0, 0, 1, 0},
-    {0, 0, 0, 0, 1, 0, 0, 1, 0},
-    {0, 0, 0, 0, 0, 1, 0, 1, 0},
-    {0, 0, 0, 0, 0, 0, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_8[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 1, 1, 0, 1, 1, 0, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 0, 1, 1, 0, 1, 1, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_9[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 1, 1, 0, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 1, 0, 0, 1, 0, 0, 1, 0},
-    {0, 0, 1, 1, 1, 1, 1, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-constexpr uint8_t char_space[charSteps][ledsCount] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
+#include "characters.h"
 
 std::unordered_map<char16_t, const uint8_t *> charMap = {
     {'0', &char_0[0][0]},
@@ -187,7 +48,7 @@ size_t text_length = text.length();
 [[noreturn]] void POVTask(void *arg) {
     adc_oneshot_unit_handle_t handle;
     constexpr adc_oneshot_unit_init_cfg_t init_conf = {
-        .unit_id = ADC_UNIT_2,
+        .unit_id = HALL_SENSOR_UNIT,
         .clk_src = ADC_RTC_CLK_SRC_DEFAULT,
         .ulp_mode = ADC_ULP_MODE_DISABLE
     };
@@ -199,7 +60,7 @@ size_t text_length = text.length();
         .bitwidth = ADC_BITWIDTH_12
     };
 
-    ESP_ERROR_CHECK(adc_oneshot_config_channel(handle, ADC_CHANNEL_0, &config));
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(handle, HALL_SENSOR_CHANNEL, &config));
 
     gpio_config_t gpio_conf = {
         .pin_bit_mask = 0,
@@ -228,7 +89,7 @@ size_t text_length = text.length();
     uint8_t drawCharIndex = 0;
 
     while (true) {
-        adc_oneshot_read(handle, ADC_CHANNEL_0, &sensorValue);
+        adc_oneshot_read(handle, HALL_SENSOR_CHANNEL, &sensorValue);
 
         if (sensorValue >= 2500 && !sensorState) {
             sensorState = true;
